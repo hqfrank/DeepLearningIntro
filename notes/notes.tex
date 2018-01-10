@@ -13,6 +13,191 @@ In this note, the concepts and knowledge on Deep Learning are recorded.
 \end{abstract}
 
 \section{Introduction to Deep Learning}
+\begin{itemize}
+	\item \textbf{Deep learning} focuses on using \textbf{neural networks} for complex practical problems.
+	\item Deep neural networks are used for \textit{object recognition} and \textit{image analysis}, for various modules of self-driving cars, for chatbots and natural language understanding problems.
+	\item Linear models and stochastic optimization methods are crucial for training deep neural networks.
+	\item Popular building blocks of neural networks includes \textbf{fully connected layers}, \textit{convolutional} and \textit{recurrent layers}. These blocks are used to define complex modern architectures in \textbf{TensorFlow} and \textbf{Keras} frameworks.
+	\item Prerequisite knowledge:
+	\begin{itemize}
+		\item \textbf{Linear Regression:} a supervised machine learning algorithm where the predicted output is continuous and has a constant slope.
+		\item \textbf{Mean Squared Error} (MSE): as a cost function, it is used to optimize the weights. MSE measures the average squared difference between an observation's actual and predicted values. The output is a single number representing the cost, or score, associated with our current set of weights.
+		\begin{equation}
+		MSE = \frac{1}{N} \sum_{i=1}^{n}{(y_i-y^`_i)^2}
+		\end{equation}
+		$y_i$ is the actual value of an observation, and $y^`_i$ is the prediction.
+		\item \textbf{Gradient descent}: a method to minimize MSE. Calculates the gradient of the cost function. To capture the impact of each weight on the final prediction, we use \textbf{partial derivatives}. To find the partial derivatives, we use the \textbf{Chain rule}. E.g.,
+		\begin{equation}
+		f^`(m,b)=\left[
+		\begin{array}{c}
+		\frac{df}{dm} \\
+		\frac{df}{db}
+		\end{array}
+		\right]
+		\end{equation}
+		To minimize the cost function, we iteratively move in the direction of steepest descent as defined by the negative of the gradient.
+		
+		\item \textbf{Learning rate}: it is size of the update on the weights. The calculated gradient tells us the slope of our cost function at our current position (i.e., weights) and the direction we should update to reduce our cost function. We should move in the direction opposite the gradient.
+		
+		\item \textbf{Training}: training a model is the process of iteratively improving your prediction equation by looping through the dataset multiple times, each time updating the weights values in the direction indicated by the slope of the cost function. Training is completed when we reach an acceptable error threshold, or when subsequent training iterations fail to reduce our cost. Before training, we need to initializing our weights (set default values), set our \textbf{hyperparameters} (i.e., learning rate and number of iterations).
+		
+		The optimization problem can be formed as,
+		\begin{equation}
+		\min_{w}L(w)=\min_{w}{\sum_{i=1}^{l}L(w;x_i,y_i)}
+		\end{equation}
+		L(w) is the loss (cost) function.\\
+		$w^0$ is the initial weights.\\
+		while True,
+		\begin{equation}
+		w^t=w^{t-1}-\eta_t\nabla{L(w^{t-1})}
+		\end{equation}
+		if $||w^t-w^{t-1}||<\epsilon$, break
+		
+		Note that, $l$ gradients should be computed on each step. If the dataset doesn`t fit in memory, it should be read from the disk on every GD step.
+		
+		\item \textbf{Normalization}: As the number of features grows, calculating gradient takes longer to compute. We can speed this up by ``normalizing" our input data to ensure all values are within the same range. This is especially important for datasets with high standard deviations or differences in the ranges of the attributes. Our goal now will be to normalize our features so they are all in the range -1 to 1.
+		First, subtract the mean of the column (mean normalization); second, divide by the range of the column (feature scaling).
+		
+		\item \textbf{Logistic regression}: a classification algorithm used to assign observations to a discrete set of classes. Logistic regression transforms its output using the logistic sigmoid function to return a \textit{probability} value which can then be mapped to two or more discrete classes.
+		
+		\item \textbf{Sigmoid activation}: it is used to map predicted values to probabilities. The function maps any real value into another value between 0 and 1.
+		\begin{equation}
+		S(z)=\frac{1}{1+e^{-z}}
+		\end{equation}
+		It's easy to calculate the derivative of the sigmoid function.
+		\begin{equation}
+		s`(z)=s(z)(1-s(z))
+		\end{equation}
+		
+		\item \textbf{Decision boundary}: the threshold value or tipping point used to map the probability value to a discrete class.
+		
+		\item \textbf{Prediction function}: in logistic regression, a prediction function returns the probability of our observation being positive, True, or ``Yes". We call this class 1 and its notation is $P(class=1)$. As the probability gets closer to 1, our model is more confident that the observation is in class 1.
+		
+		\item \textbf{Cross-Entropy}: a.k.a., \textbf{Log Loss}. It can be divided into two separate cost functions: one for $y=1$ and one for $y=0$.
+		\begin{equation}
+		\begin{array}{cc}
+		J(\theta)=\frac{1}{m}{\sum_{i=1}^{m}{Cost(h_{\theta}(x^{(i)}),y^{(i)})}} &  \\
+		Cost(h_{\theta}(x),y) = -\log{h_{\theta}(x)} & \mathrm{if} y=1 \\
+		Cost(h_{\theta}(x),y) = -\log{(1-h_{\theta}(x))} & \mathrm{if} y=0
+		\end{array}
+		\end{equation}
+		The key thing to note is the cost function penalizes confident and wrong predictions more than it rewards confident and right predictions!
+		\begin{equation}
+		J(\theta)=-\frac{1}{m}{\sum_{i=1}^{m}{y^{(i)}\log{(h_{\theta}(x^{(i)})})}+(1-y^{(i)})\log{(1-h_{\theta}(x^{(i)}))}}
+		\end{equation}
+		And the derivative of the cost function is:
+		\begin{equation}
+		C`=x\cdot {(s(z)-y)}
+		\end{equation}
 
+		\item \textbf{Multiclass logistic regression}: When $y=0,1,2,...,n$,
+		\begin{enumerate}
+			\item Divide the problem into $n+1$ binary classification problems;
+			\item For each class ...
+			\item Predict the probability the observations are in that single class.
+			\item prediction$=\max{}$(probability of the classes)
+		\end{enumerate}
+		
+		\item \textbf{Softmax transform}: transfer the score to probability.
+		\begin{equation}
+		z=(w_1^Tx, ..., w_K^Tx)\Rightarrow (e^{z_1}, ..., e^{z_K})
+		\end{equation}
+		\begin{equation}
+		\sigma (z)=\left(\frac{e^{z_1}}{\sum_{k=1}^{K}e^{z_k}}, ...,\frac{e^{z_K}}{\sum_{k=1}^{K}e^{z_k}} \right)
+		\end{equation}
+		
+		\item \textbf{Model regularization}: add a regularizer $R(w)$ to the original loss function $L(w)$. The regularizer penalizes the model for large weights. $\lambda$ is the regularization strength which controls the model quality on a training set and model complexity.
+		\begin{equation}
+		L_{\mathrm{reg}}(w)=L(w)+\lambda R(w)\Rightarrow \min_{w}{L_{\mathrm{reg}}(w)}
+		\end{equation}
+		To minimize the regularized loss function $L_{\mathrm{reg}}(w)$, it equals to the optimization problem,
+		\begin{equation}
+		\{
+		\begin{array}{c}
+		\min_{w}{L(w)} \\
+		s.t.\ R(w) \leq C
+		\end{array}
+		\end{equation}
+		If the L1 penalty $||w||=\sum{|w_i|}$ is used,
+		\begin{itemize}
+			\item Drives some weights exactly to zero;
+			\item Learns sparse models;
+			\item Cannot be optimized with simple gradient methods.
+		\end{itemize}
+		If the L2 penalty $||w||^2=\sum{w_j^2}$ is used,
+		\begin{itemize}
+			\item Drives all weights closer to zero;
+			\item Can be optimized with gradient methods.
+		\end{itemize}
+		Other regularization techniques:
+		\begin{itemize}
+			\item Dimensionality reduction, e.g., remove features, principal component analysis;
+			\item Data augmentation, e.g., upon image data, flip, rotate the image to get more data;
+			\item Dropout;
+			\item Early stopping;
+			\item Collect more data.
+		\end{itemize}
+		
+		\item \textbf{Stochastic gradient descent}: Similar to the regular GD, the training starts with an initial $w_0$, but in every step, we randomly choose an example with index $i$ between 1 and $l$ to update the weight. This process leads to very noisy approximations. But if we make enough numbers of iterations, it converges to some minimum.
+		\begin{itemize}
+			\item Noisy updates lead to fluctuations;
+			\item Needs only one example on each step;
+			\item Can be used in online setting;
+			\item Learning rate $\eta_t$ should be chosen very carefully.
+		\end{itemize}
+		
+		\item \textbf{Mini-batch gradient descent}: Similar to the stochastic GD, but in very step, we randomly choose $m$ examples from the dataset to calculated the gradient.
+		\begin{itemize}
+			\item Still can be used in online setting;
+			\item Reduces the variance of gradient approximations;
+			\item Learning rate $\eta_t$ should be chosen very carefully.
+		\end{itemize}
+		
+		\item \textbf{Gradient descent extensions}: to optimize GD for difficult functions with complex level sets, we can define the \textbf{momentum} function $h_t=\alpha h_{t-1}+\eta_tg_t$, where $g_t$ is the gradient calculated. Then we update the weight using $h_t$, i.e., $w^t=w^{t-1}-h_t$. 
+		\begin{itemize}
+			\item It tends to move in the same direction as on previous steps;
+			\item $h_t$ accumulates values along dimensions where gradients have the same sign;
+			\item Usually, $\alpha=0.9$.
+		\end{itemize}
+		\textbf{Nesterov momentum}: $h_t=\alpha h_{t-1} + \eta_t \nabla L(w^{t-1}-\alpha h_{t-1})$
+		
+		\item \textbf{AdaGrad}: choose learning rate adaptively.
+		\begin{equation}
+		\begin{array}{c}
+		G_j^t=G_j^{t-1}+g_{t,j}^2\\
+		w_j^t=w_j^{t-1}-\frac{\eta_t g_{t,j}}{\sqrt{G_j^t+\epsilon}}
+		\end{array}
+		\end{equation}
+		where $g_{t,j}$ is the gradient with respect to $j$-th parameter.
+		\begin{itemize}
+			\item Separate learning rates for each dimension;
+			\item Suits for sparse data
+			\item Learning rate can be fixed as $\eta_t=0.01$;
+			\item $G_j^t$ always increases, leads to early stops.
+		\end{itemize}
+		
+		\item \textbf{RMSprop}:
+		\begin{equation}
+		\begin{array}{c}
+		G_j^t=\alpha G_j^{t-1}+ (1-\alpha) g_{t,j}^2\\
+		w_j^t=w_j^{t-1}-\frac{\eta_t g_{t,j}}{\sqrt{G_j^t+\epsilon}}
+		\end{array}
+		\end{equation}
+		\begin{itemize}
+			\item $\alpha$ is about 0.9;
+			\item Learning rate adapts to latest gradient steps.
+		\end{itemize}
+		
+		\item \textbf{Adam}:
+		\begin{equation}
+		\begin{array}{c}
+		m_j^t=\frac{\beta_1 m_j^{t-1}+(1-\beta_1)g_{t,j}}{1-\beta_1^t}\\
+		v_j^t=\frac{\beta_2 v_j^{t-1}+(1-\beta_2)g_{t,j}^2}{1-\beta_2^t}\\
+		w_j^t=w_j^{t-1}-\frac{\eta_t m_{j}^t}{\sqrt{v_j^t}+\epsilon}
+		\end{array}
+		\end{equation}
+		Note in the first step, the normalization is very large, but as the iteration goes on, the denominator is close to 1. This is used to remove the bias of $v$ closing to 0 at the beginning. It also combines momentum and individual learning rates.
+	\end{itemize}
+\end{itemize}
 
 \end{document}
