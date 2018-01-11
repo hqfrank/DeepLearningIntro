@@ -1,5 +1,6 @@
 \documentclass[]{article}
 
+\usepackage{amsfonts}
 %opening
 \title{Notes on Deep Learning}
 \author{Qiang Hu}
@@ -198,6 +199,77 @@ In this note, the concepts and knowledge on Deep Learning are recorded.
 		\end{equation}
 		Note in the first step, the normalization is very large, but as the iteration goes on, the denominator is close to 1. This is used to remove the bias of $v$ closing to 0 at the beginning. It also combines momentum and individual learning rates.
 	\end{itemize}
+\end{itemize}
+
+\section{Introduction to neural networks}
+\begin{itemize}
+	\item In image processing, linear models are no helpful. Because pixel representations are dependencies, pixel representation in the class is very complex and very valuable.
+	\item Transform the objects into some space in which the problem is easy.
+	\item The old method to do image processing is that human experts construct features from lines and edges, which are combined into simple parts of image, into features, which are again, combined into discrete choices.
+	\item Directly stacking multiple layers of liner models does not help the non-linear classification, because it still is linear models in use.
+	\item Applying the output of the previous linear model to a non-linear function introduces the non-linearity. Some examples of non-linear functions:
+	\begin{equation}
+	f(a)=\frac{1}{1+e^a}
+	\end{equation}
+	\begin{equation}
+	f(a)=\max{(0,a)}
+	\end{equation}
+	\begin{equation}
+	f(a)=\tanh{(a)}
+	\end{equation}
+	\begin{equation}
+	f(a) = \log{(1+e^a)}
+	\end{equation}
+	Most of them increase monotonically. And most of them are constant when the argument approaches $-\infty$. The choice usually depends on the network architecture.
+	
+	\item \textbf{Layer} is a building block for neural network:
+	\begin{itemize}
+		\item Input layer: input data;
+		\item Dense layer: $f(x)=Wx+b$ (linear regressors);
+		\item Non-linearity layer: $f(x)=\sigma(x)$;
+		\item A few more: ...
+		\item Output layer
+	\end{itemize}
+	All layers except input and output layers are \textit{hidden layers}.
+	
+	\item \textbf{Activation} is the output of a layer. (i.e., some intermediate signal in the neural network)
+	
+	\item Deep model is just a (composite) function.
+	\begin{itemize}
+		\item $f_1(f_2(f_3(x,w_3),w_2),w_1)$ $\rightarrow$ loss
+		\item $x$ is feature vector
+		\item $w_{1,2,3}$ are model parameters. 
+	\end{itemize}
+
+	\item The differentiation of the above deep model function is a \textit{Jacobian matrix} when $X=[x_1,x_2,...,x_n]$, $f=[f_1,f_2,...,f_m]$:
+	\begin{equation}
+	\frac{df}{dx}=\left[\frac{df}{dx_1}...\frac{df}{dx_n}\right]=\left[\begin{array}{ccc}
+	\frac{df_1}{dx_1}&...&\frac{df_1}{dx_n}\\
+	...&...&...\\
+	\frac{df_m}{dx_1}&...&\frac{df_m}{dx_n}
+	\end{array}\right]
+	\end{equation}
+	
+	\item When $F:\mathbb{R}^{m\times n}\rightarrow \mathbb{R}^{p\times q}$, $X$ is a $m\times n$ matrix, $F$ is also a $p\times q$ matrix. Thus, $F`$ 
+	\begin{itemize}
+		\item a matrix of matrices
+		\item fourth-rank tensor
+		\item four-dimensional array
+	\end{itemize} 
+	\begin{equation}
+	\frac{\partial F}{\partial X}=\left[\begin{array}{ccc}
+	\frac{\partial F}{\partial X_{11}}&...&\frac{\partial F}{\partial X_{1n}}\\
+	...&...&...\\
+	\frac{\partial F}{\partial X_{m1}}&...&\frac{\partial F}{\partial X_{mn}}
+	\end{array}\right]
+	\end{equation}
+	\begin{equation}
+	\frac{\partial F}{\partial X_{ij}}=\left[\begin{array}{ccc}
+	\frac{\partial F_{11}}{\partial X_{ij}}&...&\frac{\partial F_{1q}}{\partial X_{ij}}\\
+	...&...&...\\
+	\frac{\partial F_{p1}}{\partial X_{ij}}&...&\frac{\partial F_{pq}}{\partial X_{ij}}
+	\end{array}\right]
+	\end{equation}
 \end{itemize}
 
 \end{document}
