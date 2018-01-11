@@ -15,12 +15,17 @@ In this note, the concepts and knowledge on Deep Learning are recorded.
 
 \section{Introduction to Deep Learning}
 \begin{itemize}
+	\item Broadly speaking, deep learning is a more approachable name for an artificial neural network. The \textit{deep} in deep learning refers to the depth of the network. An artificial neural network can be very shallow.
+	\item The basic level of a neural network is the \textbf{perceptron}, the mathematical representation of a biological neuron. There are several layers of interconnected perceptrons in a neural network.
 	\item \textbf{Deep learning} focuses on using \textbf{neural networks} for complex practical problems.
 	\item Deep neural networks are used for \textit{object recognition} and \textit{image analysis}, for various modules of self-driving cars, for chatbots and natural language understanding problems.
 	\item Linear models and stochastic optimization methods are crucial for training deep neural networks.
 	\item Popular building blocks of neural networks includes \textbf{fully connected layers}, \textit{convolutional} and \textit{recurrent layers}. These blocks are used to define complex modern architectures in \textbf{TensorFlow} and \textbf{Keras} frameworks.
 	\item Prerequisite knowledge:
 	\begin{itemize}
+		\item \textbf{Machine learning} involves computer intelligence that doesn't know the answers up front. Instead, the program will run against training data, verify the success of its attempts, and modify its approach accordingly. Machine learning typically requires a sophisticated education, spanning software engineering and computer science to statistical methods and linear algebra.
+		\item With \textbf{unsupervised learning}, there aren't any predefined or corresponding answers. The goal is to figure out the \textit{hidden patterns} in the data. It's usually used for \textbf{clustering} and \textbf{associative tasks}, like grouping customers by behavior. Amazon's ``customers who also bought..." recommendations are a type of associative task.
+		\item Deep learning has proven to be an effective unsupervised learning technique. \textit{Computer vision} has been a main beneficiary of deep learning. Speech recognition is another area that is felt deep learning's impact, because spoken languages are so vast and ambiguous. Through deep learning, generalizing the two languages (e.g., English and Mandarin) didn't require much additional design effort (i.e., design very different features).
 		\item \textbf{Linear Regression:} a supervised machine learning algorithm where the predicted output is continuous and has a constant slope.
 		\item \textbf{Mean Squared Error} (MSE): as a cost function, it is used to optimize the weights. MSE measures the average squared difference between an observation's actual and predicted values. The output is a single number representing the cost, or score, associated with our current set of weights.
 		\begin{equation}
@@ -231,8 +236,9 @@ In this note, the concepts and knowledge on Deep Learning are recorded.
 		\item Output layer
 	\end{itemize}
 	All layers except input and output layers are \textit{hidden layers}.
+	There are generally no connections between nodes in the same layer. 
 	
-	\item \textbf{Activation} is the output of a layer. (i.e., some intermediate signal in the neural network)
+	\item \textbf{Activation} is the output of a layer. (i.e., some intermediate signal in the neural network) The neurons in the hidden layers are only activated by nodes in the previous layer.
 	
 	\item Deep model is just a (composite) function.
 	\begin{itemize}
